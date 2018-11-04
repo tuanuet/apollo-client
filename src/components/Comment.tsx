@@ -7,7 +7,7 @@ class Comment extends React.PureComponent<any> {
         const { alias } = this.props.group;
         return (
             <div>
-                <Link to={`/${alias}/${fbId}`}>{fbId}</Link>
+                {/* <Link to={`/${alias}/${fbId}`}>{fbId}</Link> */}
                 : {message}</div>
         )
     }

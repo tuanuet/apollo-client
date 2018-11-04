@@ -79,7 +79,7 @@ class IndexPage extends React.Component {
                         }}
                     </Query>
                 </Row>
-                <FormAddGroup />
+                {/* <FormAddGroup /> */}
             </Fragment>
 
         );

@@ -8,6 +8,15 @@ query ($groupId: String!, $creator: String!, $startDate: String!){
     feeds: getFeedByCreatorAndTimeCreated(groupId: $groupId, creator: $creator, startDate: $startDate){
         fbId
         message
+        from {
+            fbId
+            name
+            picture
+        }
+        attachments
+        commentCount
+        reactionCount
+        createdAt
     }
 }
 `;
