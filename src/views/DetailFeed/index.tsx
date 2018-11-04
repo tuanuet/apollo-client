@@ -1,20 +1,19 @@
+import gql from "graphql-tag";
 import _ from 'lodash';
 import React, { Fragment } from 'react';
-import FeedList from '../../components/FeedList';
-import GroupInfo from '../../components/GroupInfo';
+import CommentList from '../../components/CommentList';
 import GroupQuery from '../../components/GroupQuery';
 
-class DashboardPage extends React.Component<any> {
+class DetailFeedPage extends React.Component<any> {
 
-    public render() {        
+    public render() {
         const alias = this.props.match.params.alias;
         return (
             <GroupQuery alias={alias}>
-                <GroupInfo />
-                <FeedList />
+                <CommentList {...this.props}/>
             </GroupQuery>
         )
     }
 }
 
-export default DashboardPage;
+export default DetailFeedPage

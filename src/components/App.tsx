@@ -1,5 +1,4 @@
-
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { createHttpLink } from "apollo-link-http";
@@ -10,36 +9,35 @@ import { createBrowserHistory } from 'history';
 import React from 'react';
 import { ApolloProvider } from "react-apollo";
 import { Route, Router, Switch } from 'react-router-dom';
-import resolvers from '../resolvers';
+import { defaults, resolvers, typeDefs } from '../schemas';
 import '../styles/App.css';
 import DashboardPage from '../views/Dashboard';
+import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
 
+
 export const browserHistory = createBrowserHistory();
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+    cacheRedirects: {
+        Query: {
+            group: (_: any, args: any, { getCacheKey }) => {
+                return getCacheKey({ __typename: 'GroupItem', fbId: args.fbId });
+            }
+        }
+    },
+    dataIdFromObject: (object: any) => {
+        switch (object.__typename) {
+            case 'GroupItem': return `GroupItem:${object.fbId}`; // use `key` as the primary key
+            case 'CommentItem': return `CommentItem:${object.fbId}`; // use `key` as the primary key
+            default: return defaultDataIdFromObject(object); // fall back to default handling
+        }
+    },
 
-const typeDefs = `
-  type Group {
-    fbId: String!
-    alias: String!
-    name: String!
-    description: String!
-  }
-
-  type Mutation {
-    addGroup(fbId: String!, alias: String!, name: String!, alias: description!): Group
-  }
-
-  type Query {
-    groups: [Group]
-  }
-`;
+});
 
 const stateLink = withClientState({
     // cache,
-    defaults: {
-        groups: []
-    },
+    defaults,
     resolvers,
     typeDefs
 });
@@ -51,7 +49,6 @@ const client = new ApolloClient({
     link: ApolloLink.from([stateLink]).concat(httpLink)
 });
 
-
 class App extends React.Component {
     public render() {
         return (
@@ -59,7 +56,8 @@ class App extends React.Component {
                 <Router history={browserHistory}>
                     <Switch>
                         <Route exact={true} path="/" name="Index" component={IndexPage} />
-                        <Route path="/:alias" name="Group" component={DashboardPage} />
+                        <Route exact={true} path="/:alias" name="Group" component={DashboardPage} />
+                        <Route path="/:alias/:fbId" name="DetailFeedPage" component={DetailFeedPage} />
                     </Switch>
                 </Router>
             </ApolloProvider>
