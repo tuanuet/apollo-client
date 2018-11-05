@@ -1,16 +1,14 @@
-import gql from "graphql-tag";
-import _ from 'lodash';
-import React, { Fragment } from 'react';
-import CommentList from '../../components/CommentList';
+import React from 'react';
 import GroupQuery from '../../components/GroupQuery';
+import Container from './Container';
+
 
 class DetailFeedPage extends React.Component<any> {
-
     public render() {
         const alias = this.props.match.params.alias;
         return (
             <GroupQuery alias={alias}>
-                <CommentList {...this.props}/>
+                <Container {...this.props} />
             </GroupQuery>
         )
     }

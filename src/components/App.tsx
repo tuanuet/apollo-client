@@ -1,3 +1,6 @@
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faGrinAlt } from '@fortawesome/free-solid-svg-icons'
+
 import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -15,6 +18,7 @@ import DashboardPage from '../views/Dashboard';
 import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
 
+library.add(faGrinAlt)
 
 export const browserHistory = createBrowserHistory();
 const cache = new InMemoryCache({

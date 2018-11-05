@@ -17,6 +17,22 @@ query ($groupId: String!, $creator: String!, $startDate: String!){
         commentCount
         reactionCount
         createdAt
+        reactions(limit: 2){
+            from {
+                name
+            }
+        }
+        comments(limit: 5, sort: "createdAt") {
+            from {
+                name
+                fbId
+                picture
+            }
+            fbId
+            message
+            commentCount
+            createdAt
+        }
     }
 }
 `;
