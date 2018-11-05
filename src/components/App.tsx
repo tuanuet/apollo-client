@@ -33,6 +33,8 @@ const cache = new InMemoryCache({
         switch (object.__typename) {
             case 'GroupItem': return `GroupItem:${object.fbId}`; // use `key` as the primary key
             case 'CommentItem': return `CommentItem:${object.fbId}`; // use `key` as the primary key
+            case 'FeedItem': return `FeedItem:${object.fbId}`; // use `key` as the primary key
+            case 'DetailFeedItem': return `DetailFeedItem:${object.fbId}`; // use `key` as the primary key
             default: return defaultDataIdFromObject(object); // fall back to default handling
         }
     },

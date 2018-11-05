@@ -1,13 +1,13 @@
 // tslint:disable:no-console
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 import CommentList from './CommentList';
+import Message from './Message';
 
-class Feed extends React.PureComponent<any> {
+class Feed extends React.Component<any> {
+
     public render() {
-
         const { attachments, message, fbId, from, reactionCount, commentCount, createdAt, reactions, comments } = this.props.feed;
         const [groupId, uId] = fbId.split('_');
         const { alias } = this.props.group;
@@ -37,21 +37,7 @@ class Feed extends React.PureComponent<any> {
                 <CardBody style={cardBody}>
                     <CommentList group={this.props.group} comments={comments} />
                 </CardBody>
-                <CardFooter className="d-flex align-items-center" style={cardFooter}>
-                    <div>
-                        <img className="rounded-circle" style={avatarStyle} src={from.picture} alt={from.picture} />
-                    </div>
-                    <div className="d-flex align-items-center" style={{ width: "100%" }}>
-                        <div style={{
-                            width: "-webkit-fill-available"
-                        }}>
-                            <input style={{ padding: "6px 0px 6px 6px", width: "100%", border: '0px', background: "#e9ebee", borderRadius: "16px" }} type="text" placeholder="Nhập bình luận..." />
-                        </div>
-                        <div style={{ padding: "6px 0px 2px 5px" }}>
-                            <FontAwesomeIcon icon="grin-alt" style={{width: '18px', height: '18px'}}/>
-                        </div>
-                    </div>
-                </CardFooter>
+                <Message from={from} postId={fbId}/>
             </Card>
         )
     }

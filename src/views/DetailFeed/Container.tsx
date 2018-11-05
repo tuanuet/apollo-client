@@ -2,13 +2,11 @@
 import gql from "graphql-tag";
 import _ from 'lodash';
 import React, { Fragment } from 'react';
-import { graphql } from "react-apollo";
-import CommentList from '../../components/CommentList';
+import { graphql, withApollo } from "react-apollo";
 import Feed from '../../components/Feed';
 
-
-export const GetCommentByFeedId = gql`
-query ($fbId: String!){
+export const GET_DETAIL_FEED = gql`
+query GetDetailFeed ($fbId: String!){
     detailFeed: getFeedByFbId(fbId: $fbId) {
         fbId
         message
@@ -43,7 +41,7 @@ query ($fbId: String!){
 class Container extends React.Component<any> {
 
     public render() {
-        const { detailFeedQuery } = this.props;
+        const { client, detailFeedQuery } = this.props;
 
         const { detailFeed, loading, error } = detailFeedQuery;
         if (loading) {
@@ -54,15 +52,24 @@ class Container extends React.Component<any> {
             return <div>error {error.message}</div>
         }
 
+        // save in cache
+        // client.writeQuery({
+        //     data: {
+        //         detailFeed: { ...detailFeed, ...{ __typename: "DetailFeedItem" } },
+        //     },
+        //     query: GET_DETAIL_FEED,
+        //     variables: { fbId: `${this.props.group.fbId}_${this.props.match.params.fbId}` }
+        // })
+
         return (
             <Feed group={this.props.group} feed={detailFeed} />
         )
     }
 }
 
-export default graphql(GetCommentByFeedId, {
+export default graphql(GET_DETAIL_FEED, {
     name: 'detailFeedQuery',
     options: (props: any) => ({
-        variables: { fbId: `${props.group.fbId}_${props.match.params.fbId}` }
-    })
-})(Container);
+        variables: { fbId: `${props.group.fbId}_${props.match.params.fbId}` },
+    }),
+})(withApollo(Container));

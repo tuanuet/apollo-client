@@ -1,8 +1,9 @@
+// tslint:disable:no-console
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { avatarStyle } from './Feed';
 
-class Comment extends React.PureComponent<any> {
+class Comment extends React.Component<any> {
     public moreComment = (count: number) => {
         if (count > 0) {
             return (<div style={{ padding: '4px 20px', fontSize: '12px', color: '#365899', cursor: 'pointer'}}>
@@ -13,6 +14,7 @@ class Comment extends React.PureComponent<any> {
     }
     public render() {
         const { message, fbId, from, createdAt, commentCount } = this.props.comment;
+
         const { alias } = this.props.group;
         return (
             <div className="d-flex mb-1">
