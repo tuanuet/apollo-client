@@ -11,10 +11,14 @@ class DashboardPage extends React.Component<any> {
     public render() {
         const alias = this.props.match.params.alias;
         return (
-            <Container style={{background: '#e9ebee'}}>
+            <Container style={{ background: '#e9ebee' }}>
                 <GroupQuery alias={alias}>
-                    <GroupInfo />
-                    <FeedList />
+                    {(group: any) => {
+                        return <Fragment>
+                            <GroupInfo group={group} />
+                            <FeedList group={group} />
+                        </Fragment>
+                    }}
                 </GroupQuery>
             </Container>
 

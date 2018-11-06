@@ -5,6 +5,7 @@ type Feed {
   fbId: String!
   message: String
   attachments: [String]
+  comments: [Comment]
 }
 
 extends type Query {
@@ -13,7 +14,7 @@ extends type Query {
 `
 export const resolvers = {
     Mutation: {
-        
+
     },
     Query: {
 

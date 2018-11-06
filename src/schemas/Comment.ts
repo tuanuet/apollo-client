@@ -10,6 +10,7 @@ type Comment {
     attachments: [String]
     commentCount: Int
     from: Member
+    comments: [Comment]
     createdAt: String
 }
 

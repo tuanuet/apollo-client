@@ -51,9 +51,7 @@ class FeedList extends React.Component<any> {
                     return { feeds };
                 }
 
-                if (fetchMoreResult.feeds.length > 0) {
-                    document.addEventListener('scroll', this.trackScrolling);
-                } else {
+                if (fetchMoreResult.feeds.length === 0) {
                     document.removeEventListener('scroll', this.trackScrolling);
                 }
 
@@ -74,6 +72,10 @@ class FeedList extends React.Component<any> {
     }
 
     public componentDidMount() {
+        document.addEventListener('scroll', this.trackScrolling);
+    }
+
+    public componentDidUpdate() {
         document.addEventListener('scroll', this.trackScrolling);
     }
 

@@ -13,7 +13,8 @@ query SelectedGroup ($alias: String!) {
 export default class GroupQuery extends React.Component<any>{
     public render() {
         const alias = this.props.alias;
-        
+        const { children }: any = this.props;
+
         return (
             <Query
                 query={GROUP_SELECTED}
@@ -33,12 +34,7 @@ export default class GroupQuery extends React.Component<any>{
                         query: GROUP_SELECTED
                     })
 
-                    const { children } = this.props;
-                    const childrenWithProps = React.Children.map(children, (child: any) =>
-                        React.cloneElement(child, { group: data.selectedGroup })
-                    );
-
-                    return <div>{childrenWithProps}</div>
+                    return children(data.selectedGroup)
                 }}
             </Query>
         )

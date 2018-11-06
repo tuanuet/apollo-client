@@ -11,7 +11,9 @@ class DetailFeedPage extends React.Component<any> {
         return (
             <ContainerBootstrap>
                 <GroupQuery alias={alias}>
-                    <Container {...this.props} />
+                    {(group: any) => {
+                        return <Container {...this.props} group={group}/>
+                    }}
                 </GroupQuery>
             </ContainerBootstrap>
         )
