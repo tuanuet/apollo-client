@@ -22,9 +22,12 @@ class Feed extends React.Component<any> {
                     </div>
                 </CardHeader>
                 <CardBody style={cardBody}>
-                    <div style={{ marginBottom: '5px' }}>{message} <p><Link to={`/${alias}/${uId}`}>Xem thêm</Link></p></div>
+                    <div style={{ marginBottom: '5px' }}>
+                        {multiple ? `${message.substring(0, 200)}...` : message}
+                        {!multiple || (<Link to={`/${alias}/${uId}`}>Xem thêm</Link>)}
+                    </div>
                     <div style={attachmentContainer}>
-                        {attachments.map((img: string, i: number) => {
+                        {attachments.slice(0, 1).map((img: string, i: number) => {
                             return (
                                 <img style={attachmentStyle} src={img} alt={img} key={i} />
                             )
@@ -38,7 +41,7 @@ class Feed extends React.Component<any> {
                 <CardBody style={cardBody}>
                     <CommentList group={this.props.group} comments={comments} />
                 </CardBody>
-                <Message from={from} postId={fbId} multiple={multiple} group={this.props.group}/>
+                <Message from={from} postId={fbId} multiple={multiple} group={this.props.group} />
             </Card>
         )
     }

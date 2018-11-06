@@ -17,8 +17,8 @@ mutation($postId: String!, $comment: Comment) {
 `
 
 export const ADD_COMMENT_IN_FEEDS = gql`
-mutation($groupId: String!, $creator: String!, $startDate: String!, $limit: Int!, $postId: String!, $comment: Comment) {
-    addCommentInFeeds(groupId: $groupId, creator: $creator, startDate: $startDate, limit: $limit, postId: $postId, comment: $comment) @client {
+mutation($groupId: String!, $limit: Int!, $postId: String!, $comment: Comment) {
+    addCommentInFeeds(groupId: $groupId, limit: $limit, postId: $postId, comment: $comment) @client {
         fbId
     }
 }
@@ -46,11 +46,9 @@ class Message extends React.PureComponent<any, any> {
         addComment({
             variables: {
                 comment: newComment,
-                creator: '5b5fd6001cdce61b7cd8ad11',
                 groupId: this.props.group.fbId,
                 limit: FEED_LIMIT,
                 postId: this.props.postId,
-                startDate: '2018-10-03T08:52:36.000',
             }
         });
     }
