@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGrinAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch, faGrinAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
@@ -19,6 +19,7 @@ import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
 
 library.add(faGrinAlt)
+library.add(faCircleNotch)
 
 export const browserHistory = createBrowserHistory();
 const cache = new InMemoryCache({

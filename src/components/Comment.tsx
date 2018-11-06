@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { avatarStyle } from './Feed';
 
-class Comment extends React.Component<any> {
+class Comment extends React.PureComponent<any> {
     public moreComment = (count: number) => {
         if (count > 0) {
             return (<div style={{ padding: '4px 20px', fontSize: '12px', color: '#365899', cursor: 'pointer'}}>
@@ -14,7 +14,6 @@ class Comment extends React.Component<any> {
     }
     public render() {
         const { message, fbId, from, createdAt, commentCount } = this.props.comment;
-        console.log(message);
 
         const { alias } = this.props.group;
         return (

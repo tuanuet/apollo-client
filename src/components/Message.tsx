@@ -1,11 +1,11 @@
 // tslint:disable:no-console
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import gql from 'graphql-tag';
-import React, { Fragment } from 'react';
-import { graphql, Mutation } from 'react-apollo';
+import React from 'react';
+import { Mutation } from 'react-apollo';
 import { CardFooter } from 'reactstrap';
-import { GET_DETAIL_FEED } from '../views/DetailFeed/Container';
 import { avatarStyle } from './Feed';
+import { FEED_LIMIT } from './FeedList';
 
 
 export const ADD_COMMENT = gql`
@@ -35,7 +35,7 @@ class Message extends React.PureComponent<any, any> {
     public createComment = (e: any, addComment: (input: any) => void) => {
         const message = this.message.current.value;
         const newComment = {
-            __typename: "CommentItem",
+            __typename: "Comment",
             commentCount: 0,
             createdAt: "2018-10-31T08:57:41.000",
             fbId: "718982388473129",
@@ -48,7 +48,7 @@ class Message extends React.PureComponent<any, any> {
                 comment: newComment,
                 creator: '5b5fd6001cdce61b7cd8ad11',
                 groupId: this.props.group.fbId,
-                limit: 4,
+                limit: FEED_LIMIT,
                 postId: this.props.postId,
                 startDate: '2018-10-03T08:52:36.000',
             }
@@ -58,7 +58,6 @@ class Message extends React.PureComponent<any, any> {
     public wrap = (addComment: () => void) =>
         (e: any) => {
             if (e.key === 'Enter') {
-                console.log('do validate');
                 this.createComment(e, addComment)
             }
         }

@@ -3,7 +3,7 @@ import React from 'react';
 import Comment from '../components/Comment';
 
 
-class CommentList extends React.PureComponent<any> {
+class CommentList extends React.Component<any> {
     public render() {
         const comments = this.props.comments;
         return (

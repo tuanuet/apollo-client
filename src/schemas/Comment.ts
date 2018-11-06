@@ -22,6 +22,7 @@ export const resolvers = {
         addComment: (_: any, input: any, { cache }: any) => {
             const query = GET_DETAIL_FEED;
             const previous = cache.readQuery({ query, variables: { fbId: input.postId } });
+
             const { detailFeed = {} } = previous
 
             const { comment } = input;

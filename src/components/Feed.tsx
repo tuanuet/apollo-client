@@ -5,7 +5,7 @@ import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 import CommentList from './CommentList';
 import Message from './Message';
 
-class Feed extends React.PureComponent<any> {
+class Feed extends React.Component<any> {
 
     public render() {
         const { multiple = false } = this.props;
