@@ -25,7 +25,7 @@ class Comment extends React.PureComponent<any> {
                 <div>
                     <div>
                         <div style={{ fontSize: '14px', backgroundColor: '#e9ebee', borderRadius: '20px', padding: '10px 8px' }}>
-                            <strong style={{ color: '#365899' }}>{from.name}</strong> {message}</div>
+                            <strong style={{ color: '#365899' }}>{from.name}</strong> {(message|| '').trim()}</div>
                     </div>
                     <div style={{ display: 'flex', fontSize: '12px', paddingLeft: '8px' }}>
                         <div><Link to={'#'}>Delete</Link></div>

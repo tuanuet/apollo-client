@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 import CommentList from './CommentList';
@@ -23,7 +23,7 @@ class Feed extends React.Component<any> {
                 </CardHeader>
                 <CardBody style={cardBody}>
                     <div style={{ marginBottom: '5px' }}>
-                        {multiple ? `${message.substring(0, 200)}...` : message}
+                        {multiple ? `${(message || '').substring(0, 200)}...` : message}
                         {!multiple || (<Link to={`/${alias}/${uId}`}>Xem thêm</Link>)}
                     </div>
                     <div style={attachmentContainer}>
@@ -38,10 +38,14 @@ class Feed extends React.Component<any> {
                     <div>👍❤️😮 {commentCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
                     <div>{reactionCount} bình luận</div>
                 </CardFooter>
-                <CardBody style={cardBody}>
-                    <CommentList group={this.props.group} comments={comments} />
-                </CardBody>
-                <Message from={from} postId={fbId} multiple={multiple} group={this.props.group} />
+                { comments && (
+                    <Fragment>
+                        <CardBody style={cardBody}>
+                            <CommentList group={this.props.group} comments={comments} />
+                        </CardBody>
+                        <Message from={from} postId={fbId} multiple={multiple} group={this.props.group} />
+                    </Fragment>
+                )}
             </Card>
         )
     }
