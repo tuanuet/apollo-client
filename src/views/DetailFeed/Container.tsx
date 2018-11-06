@@ -52,17 +52,8 @@ class Container extends React.Component<any> {
             return <div>error {error.message}</div>
         }
 
-        // save in cache
-        // client.writeQuery({
-        //     data: {
-        //         detailFeed: { ...detailFeed, ...{ __typename: "DetailFeedItem" } },
-        //     },
-        //     query: GET_DETAIL_FEED,
-        //     variables: { fbId: `${this.props.group.fbId}_${this.props.match.params.fbId}` }
-        // })
-
         return (
-            <Feed group={this.props.group} feed={detailFeed} />
+            <Feed group={this.props.group} feed={detailFeed} multiple={false}/>
         )
     }
 }

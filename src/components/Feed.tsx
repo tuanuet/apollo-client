@@ -5,9 +5,10 @@ import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 import CommentList from './CommentList';
 import Message from './Message';
 
-class Feed extends React.Component<any> {
+class Feed extends React.PureComponent<any> {
 
     public render() {
+        const { multiple = false } = this.props;
         const { attachments, message, fbId, from, reactionCount, commentCount, createdAt, reactions, comments } = this.props.feed;
         const [groupId, uId] = fbId.split('_');
         const { alias } = this.props.group;
@@ -37,7 +38,7 @@ class Feed extends React.Component<any> {
                 <CardBody style={cardBody}>
                     <CommentList group={this.props.group} comments={comments} />
                 </CardBody>
-                <Message from={from} postId={fbId}/>
+                <Message from={from} postId={fbId} multiple={multiple} group={this.props.group}/>
             </Card>
         )
     }

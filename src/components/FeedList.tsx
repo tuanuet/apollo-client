@@ -4,8 +4,8 @@ import { Query } from 'react-apollo';
 import Feed from '../components/Feed';
 
 export const GetFeedByCreatorAndTimeCreated = gql`
-query ($groupId: String!, $creator: String!, $startDate: String!){
-    feeds: getFeedByCreatorAndTimeCreated(groupId: $groupId, creator: $creator, startDate: $startDate){
+query ($groupId: String!, $creator: String!, $startDate: String!, $limit: Int!){
+    feeds: getFeedByCreatorAndTimeCreated(groupId: $groupId, creator: $creator, startDate: $startDate, limit: $limit){
         fbId
         message
         from {
@@ -37,12 +37,12 @@ query ($groupId: String!, $creator: String!, $startDate: String!){
 }
 `;
 
-class FeedList extends React.PureComponent<any> {
+class FeedList extends React.Component<any> {
     public render() {
         return (
             <Query
                 query={GetFeedByCreatorAndTimeCreated}
-                variables={{ groupId: this.props.group.fbId, creator: '5b5fd6001cdce61b7cd8ad11', startDate: '2018-10-03T08:52:36.000' }}
+                variables={{ groupId: this.props.group.fbId, creator: '5b5fd6001cdce61b7cd8ad11', startDate: '2018-10-03T08:52:36.000', limit: 4 }}
             >
                 {({ data, loading, error }) => {
                     if (loading) {
@@ -54,7 +54,7 @@ class FeedList extends React.PureComponent<any> {
                     }
                     const feeds = data.feeds;
                     return (
-                        feeds.map((feed: any) => <Feed {...this.props} feed={feed} key={feed.fbId}/>)
+                        feeds.map((feed: any) => <Feed {...this.props} feed={feed} key={feed.fbId} multiple={true}/>)
                     )
                 }}
             </Query>

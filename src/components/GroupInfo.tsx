@@ -10,7 +10,7 @@ query GetGroup ($fbId: String!) {
 }
 `
 
-class GroupInfo extends React.PureComponent<any> {
+class GroupInfo extends React.Component<any> {
     public render() {
         const { group } = this.props;
 

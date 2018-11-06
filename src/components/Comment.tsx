@@ -14,6 +14,7 @@ class Comment extends React.Component<any> {
     }
     public render() {
         const { message, fbId, from, createdAt, commentCount } = this.props.comment;
+        console.log(message);
 
         const { alias } = this.props.group;
         return (
