@@ -40,7 +40,7 @@ export const resolvers = {
             const previous = cache.readQuery({ query });
             const newGroup = {
                 ...input,
-                __typename: 'GroupItem',
+                __typename: 'Group',
             };
 
             cache.writeQuery({

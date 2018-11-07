@@ -1,9 +1,11 @@
 // tslint:disable:no-console
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
+import { Card, CardBody, CardFooter, CardHeader, Col } from 'reactstrap';
 import CommentList from './CommentList';
 import Message from './Message';
+
 
 class Feed extends React.Component<any> {
 
@@ -38,7 +40,20 @@ class Feed extends React.Component<any> {
                     <div>👍❤️😮 {commentCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
                     <div>{reactionCount} bình luận</div>
                 </CardFooter>
-                { comments && (
+                <CardBody className="d-flex text-center" style={{
+                    borderBottom: '1px solid lightgrey',
+                    borderTop: '1px solid lightgrey',
+                    color: '#616770',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: "bold",
+                    padding: '10px',
+                }}>
+                    <Col><FontAwesomeIcon icon="thumbs-up" /> Like</Col>
+                    <Col><FontAwesomeIcon icon="comment" /> Comment</Col>
+                    <Col><FontAwesomeIcon icon="share-alt" /> Share</Col>
+                </CardBody>
+                {comments && (
                     <Fragment>
                         <CardBody style={cardBody}>
                             <CommentList group={this.props.group} comments={comments} />
@@ -86,6 +101,7 @@ const cardBody = {
 
 const cardFooter = {
     background: 'white',
+    border: 'none',
     fontSize: '14px',
 } as React.CSSProperties
 

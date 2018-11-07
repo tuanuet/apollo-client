@@ -11,6 +11,7 @@ query GetDetailFeed ($fbId: String!){
         fbId
         message
         attachments
+        createdAt
         from {
             name
             fbId
@@ -32,6 +33,7 @@ query GetDetailFeed ($fbId: String!){
             fbId
             message
             commentCount
+            reactionCount
             createdAt
         }
     }

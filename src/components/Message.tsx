@@ -41,6 +41,7 @@ class Message extends React.PureComponent<any, any> {
             fbId: "718982388473129",
             from: this.props.from,
             message,
+            reactionCount: 0
         }
 
         addComment({

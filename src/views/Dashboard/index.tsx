@@ -1,27 +1,26 @@
 import _ from 'lodash';
+
 import React, { Fragment } from 'react';
 import { Container } from 'reactstrap';
 import FeedList from '../../components/FeedList';
-import GroupInfo from '../../components/GroupInfo';
 import GroupQuery from '../../components/GroupQuery';
+import Navbar from '../../components/NavBar';
 
 
 class DashboardPage extends React.Component<any> {
-
     public render() {
         const alias = this.props.match.params.alias;
         return (
-            <Container style={{ background: '#e9ebee' }}>
-                <GroupQuery alias={alias}>
-                    {(group: any) => {
-                        return <Fragment>
-                            <GroupInfo group={group} />
+            <GroupQuery alias={alias}>
+                {(group: any) => {
+                    return <Fragment>
+                        <Navbar group={group} />
+                        <Container style={{ padding: '0px', marginTop: '50px' }}>
                             <FeedList group={group} />
-                        </Fragment>
-                    }}
-                </GroupQuery>
-            </Container>
-
+                        </Container>
+                    </Fragment>
+                }}
+            </GroupQuery>
         )
     }
 }

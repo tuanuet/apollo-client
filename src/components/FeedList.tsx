@@ -35,6 +35,7 @@ query ($groupId: String!, $limit: Int!, $offset: Int){
             fbId
             message
             commentCount
+            reactionCount
             createdAt
         }
     }

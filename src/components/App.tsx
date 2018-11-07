@@ -1,5 +1,6 @@
+// tslint:disable:no-console
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCircleNotch, faGrinAlt } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faCircleNotch, faComment, faGrinAlt, faShareAlt, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
@@ -13,30 +14,34 @@ import React from 'react';
 import { ApolloProvider } from "react-apollo";
 import { Route, Router, Switch } from 'react-router-dom';
 import { defaults, resolvers, typeDefs } from '../schemas';
-import '../styles/App.css';
+import '../styles/index.css';
 import DashboardPage from '../views/Dashboard';
 import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
 
 library.add(faGrinAlt)
+library.add(faArrowLeft)
 library.add(faCircleNotch)
+library.add(faComment)
+library.add(faShareAlt)
+library.add(faThumbsUp)
 
 export const browserHistory = createBrowserHistory();
 const cache = new InMemoryCache({
     cacheRedirects: {
         Query: {
             group: (_: any, args: any, { getCacheKey }) => {
-                return getCacheKey({ __typename: 'GroupItem', fbId: args.fbId });
+                return getCacheKey({ __typename: 'Group', fbId: args.fbId });
             }
         }
     },
     dataIdFromObject: (object: any) => {
         switch (object.__typename) {
-            case 'GroupItem': return `GroupItem:${object.fbId}`; // use `key` as the primary key
-            case 'CommentItem': return `CommentItem:${object.fbId}`; // use `key` as the primary key
-            case 'FeedItem': return `FeedItem:${object.fbId}`; // use `key` as the primary key
-            case 'DetailFeedItem': return `DetailFeedItem:${object.fbId}`; // use `key` as the primary key
-            default: return defaultDataIdFromObject(object); // fall back to default handling
+            case 'Group': return `GroupItem:${object.fbId}`;
+            case 'Comment': return `CommentItem:${object.fbId}`;
+            case 'Feed': return `FeedItem:${object.fbId}`;
+            case 'DetailFeed': return `DetailFeedItem:${object.fbId}`;
+            default: return defaultDataIdFromObject(object);
         }
     },
 

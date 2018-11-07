@@ -12,23 +12,30 @@ type Comment {
     from: Member
     comments: [Comment]
     createdAt: String
+    creationCount: Int
 }
 
 extends type Query {
   comments: [Comment]
 }
 `
+
+function getRandomInt(max: number = 10000000) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 export const resolvers = {
     Mutation: {
-        addComment: (_: any, input: any, { cache }: any) => {
+        addComment: (_: any, input: any, { cache, getCacheKey }: any) => {
+            const { postId, comment } = input;
+            comment.__typename = 'Comment'
+            comment.fbId = getRandomInt();
+
             const query = GET_DETAIL_FEED;
             const previous = cache.readQuery({ query, variables: { fbId: input.postId } });
 
             const { detailFeed = {} } = previous
 
-            const { comment } = input;
-
-            comment.__typename = 'Comment'
             detailFeed.comments.push(comment);
 
             cache.writeQuery({
@@ -48,9 +55,13 @@ export const resolvers = {
                 return;
             }
             const { comment } = input;
-            comment.__typename = 'Comment'
 
-            feeds[index].comments.push(input.comment);
+            comment.__typename = 'Comment'
+            comment.fbId = getRandomInt();
+
+            feeds[index].comments.push(comment);
+
+            // console.log(feeds[index].comments);
 
             cache.writeQuery({
                 data: { feeds: [...feeds] },

@@ -21,6 +21,17 @@ export const GROUPS_QUERY = gql`
 }
 `;
 
+export const GROUPS_QUERY_CLIENT = gql`
+{
+    groups @client{
+        fbId
+        name
+        alias
+        description
+    }
+}
+`;
+
 export interface IGroup {
     fbId: string;
     name: string;
@@ -67,6 +78,24 @@ class IndexPage extends React.Component {
                             }
 
                             const groups: IGroup[] = data.groups;
+
+                            // const todo = client.writeFragment({
+                            //     data: {
+                            //         __typename: "Group",
+                            //         name: 'ahihi',
+
+                            //     },
+                            //     fragment: gql`
+                            //         fragment myGroup on Group {
+                            //             name
+                            //         }
+                            //     `,
+                            //     id: "GroupItem:1036400323206273",
+                            // });
+
+                            // console.log('render', todo);
+
+
                             return groups.map(group => CardIndex(group, client));
                         }}
                     </Query>

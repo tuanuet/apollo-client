@@ -43,7 +43,7 @@ class FormAddGroup extends React.Component {
         // const group = response.data.addGroup;
         // const newGroup = {
         //     ...group,
-        //     __typename: 'GroupItem',
+        //     __typename: 'Group',
         // };
         // cache.writeQuery({
         //     data: { groups: groups.concat([newGroup]) },
