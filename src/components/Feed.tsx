@@ -1,14 +1,15 @@
 // tslint:disable:no-console
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import gql from 'graphql-tag';
-import React, { Fragment, ReactElement } from 'react';
+import React, { Fragment } from 'react';
 import { graphql } from 'react-apollo'
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardFooter, CardHeader, Col } from 'reactstrap';
-import { branch, compose, pure, renderComponent, withState } from 'recompose';
+import { compose, pure, withState } from 'recompose';
+import { ErrorComponent, LoadingComponent, renderForError, renderWhileLoading, } from './Base';
 import CommentList from './CommentList';
-import Loading from './Loading';
 import Message from './Message';
+
 
 
 export const avatarStyle = {
@@ -84,12 +85,6 @@ const CommentBlockPure = ({ group, getComments: { comments } }: any) => (
     </CardBody>
 )
 
-const renderWhileLoading = (component: any, propName = 'data') =>
-    branch(
-        props => props[propName] && props[propName].loading,
-        renderComponent(component),
-    );
-
 // Attach the data HoC to the pure component
 const CommentBlock = compose<any, any>(
     graphql<any>(GET_COMMENT_FROM_FEEDID, {
@@ -98,17 +93,18 @@ const CommentBlock = compose<any, any>(
             variables: { postId: props.feedId, limit: props.limit || COMMENT_LIMIT, sort: "createdAt" },
         }),
     }),
-    renderWhileLoading(Loading, "getComments"),
+    renderWhileLoading(LoadingComponent, "getComments"),
+    renderForError(ErrorComponent, "getComments"),
     pure,
 )(CommentBlockPure);
 
 
 // Use recompose to keep the state of the input so that we
 // can use functional component syntax
-const click = withState('click', 'setClick', false);
+const withClick = withState('click', 'setClick', false);
 
 const Feed = (props: any) => {
-    const { click: clickGetComments, setClick } = props;
+    const { click, setClick } = props;
 
     const { multiple = false } = props;
     const { comments: detailComments} = props;
@@ -156,7 +152,7 @@ const Feed = (props: any) => {
                 </CardBody>
             </Fragment> }
 
-            { clickGetComments && multiple && <Fragment>
+            { click && multiple && <Fragment>
                 <CommentBlock group={props.group} feedId={fbId} />
                 <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
             </Fragment>}
@@ -165,6 +161,6 @@ const Feed = (props: any) => {
 }
 
 export default compose<any, any>(
-    click,
+    withClick,
     pure
 )(Feed);
