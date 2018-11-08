@@ -1,7 +1,10 @@
 // tslint:disable:no-console
 import gql from "graphql-tag";
+import { GET_COMMENT_FROM_FEEDID } from 'src/components/Feed';
 import { GET_DETAIL_FEED } from 'src/views/DetailFeed/Container';
-import { GetFeedByCreatorAndTimeCreated } from '../components/FeedList';
+
+// import { GetFeedByCreatorAndTimeCreated } from '../components/FeedList';
+
 
 export const typeDefs = `
 type Comment {
@@ -27,6 +30,7 @@ function getRandomInt(max: number = 10000000) {
 export const resolvers = {
     Mutation: {
         addComment: (_: any, input: any, { cache, getCacheKey }: any) => {
+
             const { postId, comment } = input;
             comment.__typename = 'Comment'
             comment.fbId = getRandomInt();
@@ -34,8 +38,7 @@ export const resolvers = {
             const query = GET_DETAIL_FEED;
             const previous = cache.readQuery({ query, variables: { fbId: input.postId } });
 
-            const { detailFeed = {} } = previous
-
+            const { detailFeed = {} } = previous;
             detailFeed.comments.push(comment);
 
             cache.writeQuery({
@@ -47,24 +50,18 @@ export const resolvers = {
             return comment;
         },
         addCommentInFeeds: (_: any, input: any, { cache }: any) => {
-            const query = GetFeedByCreatorAndTimeCreated;
-            const { feeds } = cache.readQuery({ query, variables: input });
-
-            const index = feeds.findIndex((feed: any) => feed.fbId === input.postId)
-            if (index < 0) { // feed not exists
-                return;
-            }
             const { comment } = input;
 
             comment.__typename = 'Comment'
             comment.fbId = getRandomInt();
 
-            feeds[index].comments.push(comment);
+            const query = GET_COMMENT_FROM_FEEDID;
+            const { comments } = cache.readQuery({ query, variables: input });
 
-            // console.log(feeds[index].comments);
+            comments.push(comment);
 
             cache.writeQuery({
-                data: { feeds: [...feeds] },
+                data: { comments },
                 query,
                 variables: input
             });

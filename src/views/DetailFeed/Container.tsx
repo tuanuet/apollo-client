@@ -43,7 +43,7 @@ query GetDetailFeed ($fbId: String!){
 class Container extends React.Component<any> {
 
     public render() {
-        const { client, detailFeedQuery } = this.props;
+        const { detailFeedQuery } = this.props;
 
         const { detailFeed, loading, error } = detailFeedQuery;
         if (loading) {
@@ -55,7 +55,7 @@ class Container extends React.Component<any> {
         }
 
         return (
-            <Feed group={this.props.group} feed={detailFeed} multiple={false}/>
+            <Feed group={this.props.group} feed={detailFeed} comments={[...detailFeed.comments]} multiple={false}/>
         )
     }
 }

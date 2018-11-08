@@ -26,23 +26,12 @@ query ($groupId: String!, $limit: Int!, $offset: Int){
                 name
             }
         }
-        comments(limit: 5, sort: "createdAt") {
-            from {
-                name
-                fbId
-                picture
-            }
-            fbId
-            message
-            commentCount
-            reactionCount
-            createdAt
-        }
+
     }
 }
 `;
 
-class FeedList extends React.Component<any> {
+class FeedList extends React.Component<any, any> {
 
     public onLoadMore = (fetchMore: (options: any) => void, offset: number) => {
         fetchMore({
@@ -106,7 +95,7 @@ class FeedList extends React.Component<any> {
         return (
             <Fragment>
                 <div id="listfeed">
-                    {feeds.map((feed: any) => <Feed {...this.props} feed={feed} key={feed.fbId} multiple={true} />)}
+                    {feeds.map((feed: any) => <Feed group={this.props.group} feed={feed} key={feed.fbId} multiple={true} />)}
                 </div>
                 <LoadMoreFeed />
             </Fragment>

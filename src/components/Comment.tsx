@@ -15,7 +15,7 @@ class Comment extends React.PureComponent<any> {
     public render() {
         const { message, fbId, from, createdAt, commentCount, reactionCount } = this.props.comment;
 
-        // console.log(message);
+        console.log(message);
         const { alias } = this.props.group;
         return (
             <div className="d-flex mb-1">

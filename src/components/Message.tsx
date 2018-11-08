@@ -5,7 +5,7 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import { CardFooter } from 'reactstrap';
 import { avatarStyle } from './Feed';
-import { FEED_LIMIT } from './FeedList';
+import { COMMENT_LIMIT } from './Feed';
 
 
 export const ADD_COMMENT = gql`
@@ -17,8 +17,8 @@ mutation($postId: String!, $comment: Comment) {
 `
 
 export const ADD_COMMENT_IN_FEEDS = gql`
-mutation($groupId: String!, $limit: Int!, $postId: String!, $comment: Comment) {
-    addCommentInFeeds(groupId: $groupId, limit: $limit, postId: $postId, comment: $comment) @client {
+mutation($sort: String!, $limit: Int!, $postId: String!, $comment: Comment) {
+    addCommentInFeeds(sort: $sort, limit: $limit, postId: $postId, comment: $comment) @client {
         fbId
     }
 }
@@ -48,8 +48,9 @@ class Message extends React.PureComponent<any, any> {
             variables: {
                 comment: newComment,
                 groupId: this.props.group.fbId,
-                limit: FEED_LIMIT,
+                limit: COMMENT_LIMIT,
                 postId: this.props.postId,
+                sort: "createdAt"
             }
         });
     }
