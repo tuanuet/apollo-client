@@ -7,7 +7,6 @@ import Feed from '../components/Feed';
 import LoadMoreFeed from './LoadMore';
 
 import { ErrorComponent, LoadingComponent, renderForError, renderWhileLoading } from './Base';
-
 export const FEED_LIMIT = 3
 
 export const GetFeedByCreatorAndTimeCreated = gql`
@@ -67,7 +66,7 @@ const setLoadMore = (propName = "data") =>
                 }
 
                 if (fetchMoreResult.feeds.length === 0) {
-                    document.removeEventListener('scroll', e => trackScrolling(e));
+                    document.addEventListener('scroll', handle);
                 }
                 props.setBottom(false);
 
@@ -77,25 +76,23 @@ const setLoadMore = (propName = "data") =>
         })
     }))
 
-const trackScrolling = (event: any, mThis?: any) => {
+const trackScrolling = (mThis: any) => () => {
     if (!mThis.props.bottom) {
         const wrappedElement = document.getElementById('listfeed');
         if (isBottom(wrappedElement)) {
-            document.removeEventListener('scroll', e => trackScrolling(e));
             mThis.props.setBottom(true);
         }
     }
-};
+}
 
+let handle: any;
 const withScrollPicking = lifecycle({
     componentDidMount() {
-        document.addEventListener('scroll', e => trackScrolling(e, this));
-    },
-    componentDidUpdate() {
-        document.addEventListener('scroll', e => trackScrolling(e, this));
+        handle = trackScrolling(this);
+        document.addEventListener('scroll', handle);
     },
     componentWillUnmount() {
-        document.removeEventListener('scroll', e => trackScrolling(e, this));
+        document.removeEventListener('scroll', handle);
     }
 });
 
