@@ -2,28 +2,20 @@
 import gql from "graphql-tag";
 import _ from 'lodash';
 import React, { Fragment } from 'react';
-import { Query } from "react-apollo";
+import { compose, graphql, Query, withApollo } from 'react-apollo';
+
 import { Link } from 'react-router-dom'
 import {
-    Button, Card, CardLink, CardText, CardTitle, Col, Form, FormGroup, FormText, Input, Label, Row
+    Card, CardText, CardTitle, Col
 } from 'reactstrap';
+import { pure } from 'recompose';
+import { ErrorComponent, LoadingComponent, renderForError, renderWhileLoading, } from '../../components/Base';
 import { GROUP_SELECTED } from '../../components/GroupQuery';
 
 
 export const GROUPS_QUERY = gql`
 {
     groups {
-        fbId
-        name
-        alias
-        description
-    }
-}
-`;
-
-export const GROUPS_QUERY_CLIENT = gql`
-{
-    groups @client{
         fbId
         name
         alias
@@ -61,50 +53,22 @@ export const CardIndex = (group: IGroup, client: any) => {
     );
 }
 
-class IndexPage extends React.Component {
-    public render() {
+const IndexPage = (props: any) => {
+    console.log(props);
 
-        return (
-            <Fragment>
-                <div className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
-                    <Query query={GROUPS_QUERY} >
-                        {({ loading, error, data, client, updateQuery }) => {
-
-                            if (loading) {
-                                return <p>Loading...</p>;
-                            }
-                            if (error) {
-                                return <p>Error :( ${error.message}</p>;
-                            }
-
-                            const groups: IGroup[] = data.groups;
-
-                            // const todo = client.writeFragment({
-                            //     data: {
-                            //         __typename: "Group",
-                            //         name: 'ahihi',
-
-                            //     },
-                            //     fragment: gql`
-                            //         fragment myGroup on Group {
-                            //             name
-                            //         }
-                            //     `,
-                            //     id: "GroupItem:1036400323206273",
-                            // });
-
-                            // console.log('render', todo);
-
-
-                            return groups.map(group => CardIndex(group, client));
-                        }}
-                    </Query>
-                </div>
-                {/* <FormAddGroup /> */}
-            </Fragment>
-
-        );
-    }
+    const { data, client } = props;
+    const groups: IGroup[] = data.groups;
+    return (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            {groups.map(group => CardIndex(group, client))}
+        </div >
+    );
 }
 
-export default IndexPage;
+export default compose(
+    graphql(GROUPS_QUERY),
+    renderWhileLoading(LoadingComponent),
+    renderForError(ErrorComponent),
+    withApollo,
+    pure
+)(IndexPage);

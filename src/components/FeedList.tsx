@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 import React, { Fragment } from 'react';
 import { graphql } from 'react-apollo';
-import { compose, lifecycle, pure, withProps, withState } from 'recompose';
+import { compose, lifecycle, pure, withHandlers, withProps, withState } from 'recompose';
 import Feed from '../components/Feed';
 import LoadMoreFeed from './LoadMore';
 
@@ -61,14 +61,14 @@ const setLoadMore = (propName = "data") =>
         loadMore: props[propName] && props.bottom && props[propName].fetchMore({
             updateQuery: ({ feeds }: any, { fetchMoreResult }: any) => {
 
+                props.setBottom(false);
                 if (!fetchMoreResult) {
                     return { feeds };
                 }
 
                 if (fetchMoreResult.feeds.length === 0) {
-                    document.addEventListener('scroll', handle);
+                    document.addEventListener('scroll', props.onScrollBottom);
                 }
-                props.setBottom(false);
 
                 return { feeds: [...feeds, ...fetchMoreResult.feeds] };
             },
@@ -76,28 +76,29 @@ const setLoadMore = (propName = "data") =>
         })
     }))
 
-const trackScrolling = (mThis: any) => () => {
-    if (!mThis.props.bottom) {
-        const wrappedElement = document.getElementById('listfeed');
-        if (isBottom(wrappedElement)) {
-            mThis.props.setBottom(true);
+const handleScroll = withHandlers({
+    onScrollBottom: (props: any) => (event: EventListener) => {
+        if (!props.bottom) {
+            const wrappedElement = document.getElementById('listfeed');
+            if (isBottom(wrappedElement)) {
+                props.setBottom(true);
+            }
         }
     }
-}
+})
 
-let handle: any;
-const withScrollPicking = lifecycle({
+const withScrollPicking = lifecycle<any, any>({
     componentDidMount() {
-        handle = trackScrolling(this);
-        document.addEventListener('scroll', handle);
+        document.addEventListener('scroll', this.props.onScrollBottom);
     },
     componentWillUnmount() {
-        document.removeEventListener('scroll', handle);
+        document.removeEventListener('scroll', this.props.onScrollBottom);
     }
 });
 
 export default compose<any, any>(
     withBottom,
+
     graphql<any>(GetFeedByCreatorAndTimeCreated, {
         options: (props: any) => ({
             variables: { groupId: props.group.fbId, limit: FEED_LIMIT },
@@ -105,6 +106,7 @@ export default compose<any, any>(
     }),
     renderWhileLoading(LoadingComponent),
     renderForError(ErrorComponent),
+    handleScroll,
     setLoadMore(),
     withScrollPicking,
     pure,

@@ -1,6 +1,10 @@
+// tslint:disable:no-console
+
 import gql from 'graphql-tag';
 import React from 'react';
-import { Query } from 'react-apollo';
+import { compose, graphql, withApollo} from 'react-apollo';
+import { ErrorComponent, LoadingComponent, renderForError, renderWhileLoading, } from './Base';
+
 
 export const GROUP_SELECTED = gql`
 query SelectedGroup ($alias: String!) {
@@ -9,34 +13,22 @@ query SelectedGroup ($alias: String!) {
     }
 }
 `
-
-export default class GroupQuery extends React.Component<any>{
-    public render() {
-        const alias = this.props.alias;
-        const { children }: any = this.props;
-
-        return (
-            <Query
-                query={GROUP_SELECTED}
-                variables={{ alias }}
-            >
-                {({ loading, client, data, error }) => {
-                    if (loading) {
-                        return <div>Loading...</div>
-                    }
-
-                    if (error) {
-                        return <div>error {error.message}</div>
-                    }
-
-                    client.writeQuery({
-                        data,
-                        query: GROUP_SELECTED
-                    })
-
-                    return children(data.selectedGroup)
-                }}
-            </Query>
-        )
-    }
+const GroupQuery = (props: any) => {
+    const { children, data, client}: any = props;
+    client.writeQuery({
+        data,
+        query: GROUP_SELECTED
+    })
+    return children(data.selectedGroup)
 }
+
+export default compose(
+    graphql<any>(GROUP_SELECTED, {
+        options: (props: any) => ({
+            variables: { alias: props.alias }
+        })
+    }),
+    renderWhileLoading(LoadingComponent),
+    renderForError(ErrorComponent),
+    withApollo,
+)(GroupQuery);

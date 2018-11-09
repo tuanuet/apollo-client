@@ -1,5 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { branch, compose, pure, renderComponent, withState } from 'recompose';
+import { branch, renderComponent } from 'recompose';
 
 export const renderWhileLoading = (component: any, propName = 'data') =>
     branch(
@@ -20,6 +21,6 @@ export const ErrorComponent = (props: any) => (
 )
 
 export const LoadingComponent = () => (
-    <div>Loading.....</div>
+    <div className="d-flex justify-content-center p-2"><FontAwesomeIcon icon="circle-notch" spin={true}/></div>
 )
 

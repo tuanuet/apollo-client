@@ -40,9 +40,9 @@ export default class Example extends React.Component<any, any> {
             <div>
                 <Navbar expand="md" fixed={`top`}>
                     <Container style={{ padding: '0px' }}>
-                        <NavbarBrand href="/">
+                        <Link to="/" style={{paddingRight: '12px'}}>
                             <FontAwesomeIcon icon="arrow-left" style={{ color: 'white' }} />
-                        </NavbarBrand>
+                        </Link>
                         <NavbarBrand href={`/${this.props.group.alias}`}>
                             {this.props.group.name}
                         </NavbarBrand>
