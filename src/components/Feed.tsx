@@ -25,7 +25,7 @@ const timeCreatedAt = {
 const attachmentContainer = {
     display: 'flex',
     flexWrap: "wrap",
-    height: '300px'
+    height: '400px'
 } as React.CSSProperties
 
 const attachmentStyle = {
@@ -39,9 +39,7 @@ const cardHeader = {
 } as React.CSSProperties
 
 const cardBody = {
-    paddingBottom: '0px',
-    paddingTop: '5px',
-
+    padding: "2px 0px"
 } as React.CSSProperties
 
 const actionBar = {
@@ -57,8 +55,9 @@ const actionBar = {
 const cardFooter = {
     background: 'white',
     border: 'none',
+    color: 'darkgrey',
     fontSize: '14px',
-    padding: '10px 8px 10px 12px'
+    padding: '10px 8px 10px 12px',
 } as React.CSSProperties
 
 export const COMMENT_LIMIT = 1;
@@ -121,7 +120,7 @@ const Feed = (props: any) => {
                 </div>
             </CardHeader>
             <CardBody style={cardBody}>
-                <div style={{ marginBottom: '5px' }}>
+                <div style={{ margin: '2px 14px', fontSize: "14px" }}>
                     {multiple ? `${(message || '').substring(0, 200)}...` : message}
                     {!multiple || (<Link to={`/${alias}/${uId}`}>Xem thêm</Link>)}
                 </div>
@@ -134,7 +133,7 @@ const Feed = (props: any) => {
                 </div>
             </CardBody>
             <CardFooter style={cardFooter} className="d-flex align-items-center justify-content-between">
-                <div style={{ width: '60%' }}>👍❤️😮 {commentCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
+                <div style={{ width: '75%'}}>👍❤️😮 {commentCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
                 <div>{reactionCount} bình luận</div>
             </CardFooter>
             <CardBody className="d-flex text-center" style={actionBar}>
@@ -150,7 +149,7 @@ const Feed = (props: any) => {
                 </CardBody>
             </Fragment>}
 
-            {click && multiple && <CardBody style={cardBody}>
+            {click && multiple && <CardBody style={{padding: "10px 16px"}}>
                 <CommentBlock group={props.group} feedId={fbId} />
                 <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
             </CardBody>}

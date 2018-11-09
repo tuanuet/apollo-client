@@ -98,7 +98,6 @@ const withScrollPicking = lifecycle<any, any>({
 
 export default compose<any, any>(
     withBottom,
-
     graphql<any>(GetFeedByCreatorAndTimeCreated, {
         options: (props: any) => ({
             variables: { groupId: props.group.fbId, limit: FEED_LIMIT },
