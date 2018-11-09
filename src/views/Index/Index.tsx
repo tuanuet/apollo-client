@@ -54,8 +54,6 @@ export const CardIndex = (group: IGroup, client: any) => {
 }
 
 const IndexPage = (props: any) => {
-    console.log(props);
-
     const { data, client } = props;
     const groups: IGroup[] = data.groups;
     return (

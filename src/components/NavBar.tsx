@@ -1,7 +1,9 @@
 // tslint:disable:no-console
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types'
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import {
     Col,
     Collapse,
@@ -22,7 +24,10 @@ import Container from 'reactstrap/lib/Container';
 
 
 
-export default class Example extends React.Component<any, any> {
+export default class NavbarComponent extends React.PureComponent<any, any> {
+    public static contextTypes = {
+        router: PropTypes.object, // replace with PropTypes.object if you use them
+    }
     constructor(props: any) {
         super(props);
         this.toggle = this.toggle.bind(this);
@@ -39,8 +44,8 @@ export default class Example extends React.Component<any, any> {
         return (
             <div>
                 <Navbar expand="md" fixed={`top`}>
-                    <Container style={{ padding: '0px' }}>
-                        <Link to="/" style={{paddingRight: '12px'}}>
+                    <Container>
+                        <Link onClick={this.context.router.history.goBack} to="#" style={{paddingRight: '12px'}}>
                             <FontAwesomeIcon icon="arrow-left" style={{ color: 'white' }} />
                         </Link>
                         <NavbarBrand href={`/${this.props.group.alias}`}>

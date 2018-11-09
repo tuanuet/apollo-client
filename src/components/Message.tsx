@@ -1,9 +1,8 @@
 // tslint:disable:no-console
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import gql from 'graphql-tag';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
-import { CardFooter } from 'reactstrap';
 import { avatarStyle } from './Feed';
 import { COMMENT_LIMIT } from './Feed';
 
@@ -75,7 +74,7 @@ class Message extends React.PureComponent<any, any> {
                 update={this.updateAfterAddComment}
             >
                 {(addComment) => (
-                    <CardFooter className="d-flex align-items-center" style={cardFooter}>
+                    <div className="d-flex align-items-center" style={cardFooter}>
                         <div>
                             <img className="rounded-circle" style={avatarStyle} src={from.picture} alt={from.picture} />
                         </div>
@@ -93,7 +92,7 @@ class Message extends React.PureComponent<any, any> {
                                 <FontAwesomeIcon icon="grin-alt" style={{ width: '18px', height: '18px' }} />
                             </div>
                         </div>
-                    </CardFooter>
+                    </div>
                 )}
             </Mutation>
         )
@@ -103,6 +102,7 @@ class Message extends React.PureComponent<any, any> {
 const cardFooter = {
     background: 'white',
     fontSize: '14px',
+    padding: '8px 0px'
 } as React.CSSProperties
 
 export default Message;

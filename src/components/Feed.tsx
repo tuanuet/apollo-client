@@ -51,7 +51,7 @@ const actionBar = {
     cursor: 'pointer',
     fontSize: '14px',
     fontWeight: "bold",
-    padding: '10px',
+    padding: '10px 4px',
 } as React.CSSProperties
 
 const cardFooter = {
@@ -80,9 +80,7 @@ export const GET_COMMENT_FROM_FEEDID = gql`
     }
 `
 const CommentBlockPure = ({ group, getComments: { comments } }: any) => (
-    <CardBody style={cardBody}>
-        <CommentList group={group} comments={comments} />
-    </CardBody>
+    <CommentList group={group} comments={comments} />
 )
 
 // Attach the data HoC to the pure component
@@ -107,7 +105,7 @@ const Feed = (props: any) => {
     const { click, setClick } = props;
 
     const { multiple = false } = props;
-    const { comments: detailComments} = props;
+    const { comments: detailComments } = props;
     const { attachments, message, fbId, from, reactionCount, commentCount, createdAt, reactions } = props.feed;
     const [groupId, uId] = fbId.split('_');
     const { alias } = props.group;
@@ -145,17 +143,17 @@ const Feed = (props: any) => {
                 <Col><FontAwesomeIcon icon="share-alt" /> Share</Col>
             </CardBody>
 
-            { !multiple && <Fragment>
-                <CardBody style={cardBody}>
+            {!multiple && <Fragment>
+                <CardBody style={cardBody} >
                     <CommentList group={props.group} comments={detailComments} />
                     <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
                 </CardBody>
-            </Fragment> }
+            </Fragment>}
 
-            { click && multiple && <Fragment>
+            {click && multiple && <CardBody style={cardBody}>
                 <CommentBlock group={props.group} feedId={fbId} />
                 <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
-            </Fragment>}
+            </CardBody>}
         </Card>
     )
 }

@@ -13,11 +13,13 @@ import { createBrowserHistory } from 'history';
 import React from 'react';
 import { ApolloProvider } from "react-apollo";
 import { Route, Router, Switch } from 'react-router-dom';
+import DefaultLayout from '../components/Base/DefaultLayout';
 import { defaults, resolvers, typeDefs } from '../schemas';
 import '../styles/index.css';
 import DashboardPage from '../views/Dashboard';
 import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
+
 
 library.add(faGrinAlt)
 library.add(faArrowLeft)
@@ -61,6 +63,7 @@ const client = new ApolloClient({
     link: ApolloLink.from([stateLink]).concat(httpLink)
 });
 
+
 class App extends React.Component {
     public render() {
         return (
@@ -68,8 +71,11 @@ class App extends React.Component {
                 <Router history={browserHistory}>
                     <Switch>
                         <Route exact={true} path="/" name="Index" component={IndexPage} />
-                        <Route exact={true} path="/:alias" name="Group" component={DashboardPage} />
-                        <Route path="/:alias/:fbId" name="DetailFeedPage" component={DetailFeedPage} />
+                        <DefaultLayout exact={true} path="/:alias" component={DashboardPage} />
+                        <DefaultLayout exact={true} path="/:alias/:fbId" component={DetailFeedPage} />
+
+                        {/* <Route exact={true} path="/:alias" name="Group" component={DashboardPage} />
+                        <Route path="/:alias/:fbId" name="DetailFeedPage" component={DetailFeedPage} /> */}
                     </Switch>
                 </Router>
             </ApolloProvider>

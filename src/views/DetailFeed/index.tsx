@@ -9,7 +9,7 @@ class DetailFeedPage extends React.Component<any> {
     public render() {
         const alias = this.props.match.params.alias;
         return (
-            <ContainerBootstrap>
+            <ContainerBootstrap style={{ padding: '0px' }}>
                 <GroupQuery alias={alias}>
                     {(group: any) => {
                         return <Container {...this.props} group={group} />
