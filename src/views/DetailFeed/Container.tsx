@@ -20,7 +20,9 @@ query GetDetailFeed ($fbId: String!){
         commentCount
         reactionCount
         reactions(limit: 2) {
+            id
             from {
+                fbId
                 name
             }
         }

@@ -24,7 +24,9 @@ query ($groupId: String!, $limit: Int!, $offset: Int){
         reactionCount
         createdAt
         reactions(limit: 2){
+            id
             from {
+                fbId
                 name
             }
         }

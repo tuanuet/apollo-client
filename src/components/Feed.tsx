@@ -143,7 +143,7 @@ const Feed = (props: any) => {
             </CardBody>
 
             {!multiple && <Fragment>
-                <CardBody style={cardBody} >
+                <CardBody style={{ padding: "10px 16px" }} >
                     <CommentList group={props.group} comments={detailComments} />
                     <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
                 </CardBody>

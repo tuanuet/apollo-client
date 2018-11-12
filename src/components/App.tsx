@@ -42,8 +42,10 @@ const cache = new InMemoryCache({
             case 'Group': return `GroupItem:${object.fbId}`;
             case 'Comment': return `CommentItem:${object.fbId}`;
             case 'Feed': return `FeedItem:${object.fbId}`;
-            case 'DetailFeed': return `DetailFeedItem:${object.fbId}`;
+            case 'Member': return `MemberItem:${object.fbId}`;
+            case 'Reaction': return `ReactionItem:${object.id}`;
             default: return defaultDataIdFromObject(object);
+
         }
     },
 
