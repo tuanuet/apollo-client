@@ -9,7 +9,7 @@ export default ({ component: Component, ...rest }: any) => {
             <GroupQuery alias={matchProps.match.params.alias}>
                 {(group: any) => {
                     return (<Fragment>
-                        <Navbar group={group} />
+                        <Navbar group={group} {...matchProps} />
                         <div style={{ padding: '0px', marginTop: '50px' }}>
                             <Component group={group} {...matchProps} />
                         </div>

@@ -5,6 +5,7 @@ import { faArrowLeft, faCircleNotch, faComment, faGrinAlt, faShareAlt, faThumbsU
 import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
 import { createHttpLink } from "apollo-link-http";
 import { withClientState } from 'apollo-link-state';
 
@@ -19,6 +20,7 @@ import '../styles/index.css';
 import DashboardPage from '../views/Dashboard';
 import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
+import LoginPage from '../views/Login';
 
 
 library.add(faGrinAlt)
@@ -58,11 +60,23 @@ const stateLink = withClientState({
     typeDefs
 });
 
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem('token');
+    // return the headers to the context so httpLink can read them
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? token : "",
+        }
+    }
+});
+
 
 const httpLink = createHttpLink({ uri: "http://localhost:4000/graphql" });
 const client = new ApolloClient({
     cache,
-    link: ApolloLink.from([stateLink]).concat(httpLink)
+    link: ApolloLink.from([stateLink]).concat(authLink.concat(httpLink))
 });
 
 
@@ -73,6 +87,7 @@ class App extends React.Component {
                 <Router history={browserHistory}>
                     <Switch>
                         <Route exact={true} path="/" name="Index" component={IndexPage} />
+                        <Route exact={true} path="/login" name="Index" component={LoginPage} />
                         <DefaultLayout exact={true} path="/:alias" component={DashboardPage} />
                         <DefaultLayout exact={true} path="/:alias/:fbId" component={DetailFeedPage} />
 

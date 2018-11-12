@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import _ from 'lodash';
 import React, { Fragment } from 'react';
 import { Container } from 'reactstrap';

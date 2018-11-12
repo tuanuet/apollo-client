@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types'
 import React from 'react';
+import { withApollo } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
 import {
@@ -24,7 +25,7 @@ import Container from 'reactstrap/lib/Container';
 
 
 
-export default class NavbarComponent extends React.PureComponent<any, any> {
+class NavbarComponent extends React.PureComponent<any, any> {
     public static contextTypes = {
         router: PropTypes.object, // replace with PropTypes.object if you use them
     }
@@ -40,7 +41,14 @@ export default class NavbarComponent extends React.PureComponent<any, any> {
             isOpen: !this.state.isOpen
         });
     }
+
+    public logout = () => {
+        this.props.client.clearStore()
+        this.props.history.push('/login')
+    }
     public render() {
+        console.log(this.props);
+
         return (
             <div>
                 <Navbar expand="md" fixed={`top`}>
@@ -61,10 +69,10 @@ export default class NavbarComponent extends React.PureComponent<any, any> {
                                     <DropdownMenu right={true}>
                                         <DropdownItem>
                                             Cài đặt
-                                    </DropdownItem>
-                                        <DropdownItem>
+                                        </DropdownItem>
+                                        <DropdownItem onClick={this.logout}>
                                             Logout
-                                    </DropdownItem>
+                                        </DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             </Nav>
@@ -76,3 +84,4 @@ export default class NavbarComponent extends React.PureComponent<any, any> {
     }
 }
 
+export default withApollo(NavbarComponent);
