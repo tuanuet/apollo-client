@@ -21,7 +21,7 @@ import DashboardPage from '../views/Dashboard';
 import DetailFeedPage from '../views/DetailFeed';
 import IndexPage from '../views/Index/Index';
 import LoginPage from '../views/Login';
-
+import PrivateRoute from './Base/PrivateRoute';
 
 library.add(faGrinAlt)
 library.add(faArrowLeft)
@@ -88,11 +88,9 @@ class App extends React.Component {
                     <Switch>
                         <Route exact={true} path="/" name="Index" component={IndexPage} />
                         <Route exact={true} path="/login" name="Index" component={LoginPage} />
-                        <DefaultLayout exact={true} path="/:alias" component={DashboardPage} />
-                        <DefaultLayout exact={true} path="/:alias/:fbId" component={DetailFeedPage} />
-
-                        {/* <Route exact={true} path="/:alias" name="Group" component={DashboardPage} />
-                        <Route path="/:alias/:fbId" name="DetailFeedPage" component={DetailFeedPage} /> */}
+                        <PrivateRoute exact={true} path="/index" name="Index" component={IndexPage} />
+                        <PrivateRoute exact={true} path="/:alias" layout={DefaultLayout} component={DashboardPage} />
+                        <DefaultLayout exact={true} path="/:alias/:fbId" layout={DefaultLayout} component={DetailFeedPage} />
                     </Switch>
                 </Router>
             </ApolloProvider>

@@ -43,12 +43,11 @@ class NavbarComponent extends React.PureComponent<any, any> {
     }
 
     public logout = () => {
-        this.props.client.clearStore()
-        this.props.history.push('/login')
+        this.props.client.clearStore();
+        localStorage.removeItem('token');
+        this.props.history.push('/login');
     }
     public render() {
-        console.log(this.props);
-
         return (
             <div>
                 <Navbar expand="md" fixed={`top`}>

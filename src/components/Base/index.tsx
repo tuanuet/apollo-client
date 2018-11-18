@@ -23,4 +23,3 @@ export const ErrorComponent = (props: any) => (
 export const LoadingComponent = () => (
     <div className="d-flex justify-content-center p-2"><FontAwesomeIcon icon="circle-notch" spin={true}/></div>
 )
-

@@ -10,8 +10,6 @@ import { ErrorComponent, LoadingComponent, renderForError, renderWhileLoading, }
 import CommentList from './CommentList';
 import Message from './Message';
 
-
-
 export const avatarStyle = {
     height: '40px',
     marginRight: '10px',
