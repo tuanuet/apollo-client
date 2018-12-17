@@ -64,6 +64,7 @@ export const GET_COMMENT_FROM_FEEDID = gql`
     query getCommentsFromParentId($postId: String!, $limit: Int!, $sort: String!){
         comments: getCommentsByParentId(fbId: $postId, limit: $limit, sort: $sort) {
             from {
+                id
                 name
                 fbId
                 picture
@@ -76,9 +77,11 @@ export const GET_COMMENT_FROM_FEEDID = gql`
         }
     }
 `
-const CommentBlockPure = ({ group, getComments: { comments } }: any) => (
-    <CommentList group={group} comments={comments} />
-)
+
+const CommentBlockPure = ({ group, getComments }: any) => {
+    const { comments } = getComments
+    return <CommentList group={group} comments={comments} />
+}
 
 // Attach the data HoC to the pure component
 const CommentBlock = compose<any, any>(
@@ -122,17 +125,18 @@ const Feed = (props: any) => {
                     {multiple ? `${(message || '').substring(0, 200)}...` : message}
                     {!multiple || (<Link to={`/${alias}/${uId}`}>Xem thêm</Link>)}
                 </div>
-                <div style={attachmentContainer}>
-                    {attachments.slice(0, 1).map((img: string, i: number) => {
-                        return (
-                            <img style={attachmentStyle} src={img} alt={img} key={i} />
-                        )
-                    })}
-                </div>
+                {attachments.length > 0 && (
+                    <div style={attachmentContainer}>
+                        {attachments.slice(0, 1).map((img: string, i: number) => {
+                            return (
+                                <img style={attachmentStyle} src={img} alt={img} key={i} />
+                            )
+                        })}
+                    </div>)}
             </CardBody>
             <CardFooter style={cardFooter} className="d-flex align-items-center justify-content-between">
-                <div style={{ width: '75%'}}>👍❤️😮 {commentCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
-                <div>{reactionCount} bình luận</div>
+                <div style={{ width: '75%' }}>👍❤️😮 {reactionCount - 2} người vả {reactions.map((r: any) => r.from.name).join(', ')}</div>
+                <div>{commentCount} bình luận</div>
             </CardFooter>
             <CardBody className="d-flex text-center" style={actionBar}>
                 <Col><FontAwesomeIcon icon="thumbs-up" /> Like</Col>
@@ -147,7 +151,7 @@ const Feed = (props: any) => {
                 </CardBody>
             </Fragment>}
 
-            {click && multiple && <CardBody style={{padding: "10px 16px"}}>
+            {click && multiple && <CardBody style={{ padding: "10px 16px" }}>
                 <CommentBlock group={props.group} feedId={fbId} />
                 <Message from={from} postId={fbId} multiple={multiple} group={props.group} />
             </CardBody>}

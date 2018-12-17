@@ -15,6 +15,7 @@ query ($groupId: String!, $limit: Int!, $offset: Int){
         fbId
         message
         from {
+            id
             fbId
             name
             picture

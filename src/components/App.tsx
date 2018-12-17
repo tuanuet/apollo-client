@@ -4,10 +4,12 @@ import { faArrowLeft, faCircleNotch, faComment, faGrinAlt, faShareAlt, faThumbsU
 
 import { defaultDataIdFromObject, InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { createHttpLink } from "apollo-link-http";
 import { withClientState } from 'apollo-link-state';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createBrowserHistory } from 'history';
@@ -73,11 +75,32 @@ const authLink = setContext((_, { headers }) => {
 });
 
 
+const wsLink = new WebSocketLink({
+    options: {
+        reconnect: true
+    },
+    uri: `ws://localhost:4000/graphql`
+});
+
 const httpLink = createHttpLink({ uri: "http://localhost:4000/graphql" });
+
+const link = split(
+    // split based on operation type
+    ({ query }) => {
+        const { kind, operation }: any = getMainDefinition(query);
+        return kind === 'OperationDefinition' && operation === 'subscription';
+    },
+    wsLink,
+    httpLink,
+);
+
+
 const client = new ApolloClient({
     cache,
-    link: ApolloLink.from([stateLink]).concat(authLink.concat(httpLink))
+    link: ApolloLink.from([stateLink]).concat(authLink.concat(link))
 });
+
+
 
 
 class App extends React.Component {

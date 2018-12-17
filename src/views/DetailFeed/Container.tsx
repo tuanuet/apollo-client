@@ -2,7 +2,8 @@
 import gql from "graphql-tag";
 import _ from 'lodash';
 import React, { Fragment } from 'react';
-import { graphql, withApollo } from "react-apollo";
+import { compose, graphql, withApollo } from "react-apollo";
+import { withState } from 'recompose';
 import Feed from '../../components/Feed';
 
 export const GET_DETAIL_FEED = gql`
@@ -13,6 +14,7 @@ query GetDetailFeed ($fbId: String!){
         attachments
         createdAt
         from {
+            id
             name
             fbId
             picture
@@ -28,6 +30,7 @@ query GetDetailFeed ($fbId: String!){
         }
         comments {
             from {
+                id
                 name
                 fbId
                 picture
@@ -42,7 +45,43 @@ query GetDetailFeed ($fbId: String!){
 }
 `;
 
+const SUBSCRIPTION_COMMENT = gql`
+    subscription commentAdded {
+        commentAdded {
+            from {
+                id
+                name
+                fbId
+                picture
+            }
+            fbId
+            message
+            commentCount
+            reactionCount
+            createdAt
+        }
+    }
+`
 class Container extends React.Component<any> {
+
+    public componentDidMount() {
+        const { detailFeedQuery } = this.props;
+        detailFeedQuery.subscribeToMore({
+            document: SUBSCRIPTION_COMMENT,
+            updateQuery: (prev: any, { subscriptionData: { data: { commentAdded } } }: any) => {
+                const { detailFeed } = prev;
+
+                return {
+                    detailFeed: {
+                        ...detailFeed,
+                        commentCount: detailFeed.commentCount + 1,
+                        comments: detailFeed.comments.concat([commentAdded])
+                    }
+                }
+            }
+        })
+    }
+
 
     public render() {
         const { detailFeedQuery } = this.props;
@@ -57,7 +96,7 @@ class Container extends React.Component<any> {
         }
 
         return (
-            <Feed group={this.props.group} feed={detailFeed} comments={[...detailFeed.comments]} multiple={false}/>
+            <Feed group={this.props.group} feed={detailFeed} comments={[...detailFeed.comments]} multiple={false} />
         )
     }
 }

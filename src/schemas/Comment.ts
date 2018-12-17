@@ -1,10 +1,7 @@
 // tslint:disable:no-console
 import gql from "graphql-tag";
-import { GET_COMMENT_FROM_FEEDID } from 'src/components/Feed';
-import { GET_DETAIL_FEED } from 'src/views/DetailFeed/Container';
-
-// import { GetFeedByCreatorAndTimeCreated } from '../components/FeedList';
-
+import { GET_COMMENT_FROM_FEEDID } from '../components/Feed';
+import { GET_DETAIL_FEED } from '../views/DetailFeed/Container';
 
 export const typeDefs = `
 type Comment {
@@ -24,52 +21,52 @@ extends type Query {
 `
 
 function getRandomInt(max: number = 10000000) {
-    return Math.floor(Math.random() * Math.floor(max));
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 export const resolvers = {
-    Mutation: {
-        addComment: (_: any, input: any, { cache, getCacheKey }: any) => {
+  Mutation: {
+    addComment: (_: any, input: any, { cache, getCacheKey }: any) => {
 
-            const { postId, comment } = input;
-            comment.__typename = 'Comment'
-            comment.fbId = getRandomInt();
+      const { postId, comment } = input;
+      comment.__typename = 'Comment'
+      comment.fbId = getRandomInt();
 
-            const query = GET_DETAIL_FEED;
-            const previous = cache.readQuery({ query, variables: { fbId: input.postId } });
+      const query = GET_DETAIL_FEED;
+      const previous = cache.readQuery({ query, variables: { fbId: input.postId } });
 
-            const { detailFeed = {} } = previous;
-            detailFeed.comments.push(comment);
+      const { detailFeed = {} } = previous;
+      detailFeed.comments.push(comment);
 
-            cache.writeQuery({
-                data: { detailFeed },
-                query,
-                variables: { fbId: input.postId }
-            });
+      cache.writeQuery({
+        data: { detailFeed },
+        query,
+        variables: { fbId: input.postId }
+      });
 
-            return comment;
-        },
-        addCommentInFeeds: (_: any, input: any, { cache }: any) => {
-            const { comment } = input;
-
-            comment.__typename = 'Comment'
-            comment.fbId = getRandomInt();
-
-            const query = GET_COMMENT_FROM_FEEDID;
-            const { comments } = cache.readQuery({ query, variables: input });
-
-            comments.push(comment);
-
-            cache.writeQuery({
-                data: { comments },
-                query,
-                variables: input
-            });
-
-            return comment;
-        },
+      return comment;
     },
-    Query: {
+    addCommentInFeeds: (_: any, input: any, { cache }: any) => {
+      const { comment } = input;
 
-    }
+      comment.__typename = 'Comment'
+      comment.fbId = getRandomInt();
+
+      const query = GET_COMMENT_FROM_FEEDID;
+      const { comments } = cache.readQuery({ query, variables: input });
+
+      comments.push(comment);
+
+      cache.writeQuery({
+        data: { comments },
+        query,
+        variables: input
+      });
+
+      return comment;
+    },
+  },
+  Query: {
+
+  }
 }
