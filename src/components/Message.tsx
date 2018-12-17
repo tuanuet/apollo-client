@@ -87,7 +87,7 @@ export default compose<any, any>(
                 input: {
                     creator: props.from.id,
                     groupId: props.group.fbId,
-                    message: props.message,
+                    message: props.message.trim(),
                     postId: props.postId,
                 }
             }
@@ -100,7 +100,7 @@ export default compose<any, any>(
             }
         },
         onChangeMessage: (props: any) => (e: any) => {
-            props.setMessage(e.target.value.trim())
+            props.setMessage(e.target.value)
         }
     }),
 )(CommentBox);
