@@ -46,8 +46,8 @@ query GetDetailFeed ($fbId: String!){
 `;
 
 const SUBSCRIPTION_COMMENT = gql`
-    subscription commentAdded {
-        commentAdded {
+    subscription commentAdded($postId: String!) {
+        commentAdded(postId: $postId) {
             from {
                 id
                 name
@@ -78,6 +78,9 @@ class Container extends React.Component<any> {
                         comments: detailFeed.comments.concat([commentAdded])
                     }
                 }
+            },
+            variables: {
+                postId: `${this.props.group.fbId}_${this.props.match.params.fbId}`
             }
         })
     }
