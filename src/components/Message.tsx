@@ -5,7 +5,8 @@ import React, { Fragment } from 'react';
 import { graphql } from 'react-apollo';
 import { compose, withHandlers, withState } from 'recompose'
 import { GET_DETAIL_FEED } from 'src/views/DetailFeed/Container';
-import { avatarStyle } from './Feed';
+import { avatarStyle, GET_COMMENT_FROM_FEEDID } from './Feed';
+import { GetFeedByCreatorAndTimeCreated } from './FeedList';
 
 const MUTATION_COMMENT = gql`
     mutation mutationComment($input: InputComment!) {
@@ -17,6 +18,7 @@ const MUTATION_COMMENT = gql`
                 picture
             }
             fbId
+            postId
             message
             commentCount
             reactionCount
@@ -61,28 +63,30 @@ export default compose<any, any>(
             onCompleted: () => {
                 props.setMessage('')
             },
-            // update: (cache: any, { data: { mutationComment } }: any, arg3: any) => {
-            //     const { detailFeed } = cache.readQuery({
-            //         query: GET_DETAIL_FEED,
-            //         variables: {
-            //             fbId: props.postId
-            //         }
-            //     });
+            update: (cache: any, { data: { mutationComment } }: any, arg3: any) => {
+                if (!props.multiple) { return; }
 
-            //     cache.writeQuery({
-            //         data: {
-            //             detailFeed: {
-            //                 ...detailFeed,
-            //                 commentCount: detailFeed.commentCount + 1,
-            //                 comments: detailFeed.comments.concat([mutationComment])
-            //             }
-            //         },
-            //         query: GET_DETAIL_FEED,
-            //         variables: {
-            //             fbId: props.postId
-            //         }
-            //     });
-            // },
+                const { comments } = cache.readQuery({
+                    query: GET_COMMENT_FROM_FEEDID,
+                    variables: {
+                        limit: 1,
+                        postId: mutationComment.postId,
+                        sort: 'createdAt'
+                    }
+                });
+
+                cache.writeQuery({
+                    data: {
+                        comments: [...comments, mutationComment]
+                    },
+                    query: GET_COMMENT_FROM_FEEDID,
+                    variables: {
+                        limit: 1,
+                        postId: mutationComment.postId,
+                        sort: 'createdAt'
+                    }
+                });
+            },
             variables: {
                 input: {
                     creator: props.from.id,
