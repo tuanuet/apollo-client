@@ -62,29 +62,20 @@ const SUBSCRIPTION_COMMENT = gql`
         }
     }
 `
-class Container extends React.Component<any> {
+class Container extends React.Component<any, any> {
+    private subscribe: any;
 
     public componentDidMount() {
-        const { detailFeedQuery } = this.props;
-        detailFeedQuery.subscribeToMore({
-            document: SUBSCRIPTION_COMMENT,
-            updateQuery: (prev: any, { subscriptionData: { data: { commentAdded } } }: any) => {
-                const { detailFeed } = prev;
-
-                return {
-                    detailFeed: {
-                        ...detailFeed,
-                        commentCount: detailFeed.commentCount + 1,
-                        comments: detailFeed.comments.concat([commentAdded])
-                    }
-                }
-            },
-            variables: {
-                postId: `${this.props.group.fbId}_${this.props.match.params.fbId}`
-            }
-        })
+        if (!this.subscribe) {
+            this.subscribe = this.props.subscribeComment();
+        }
     }
 
+    public componentWillMount() {
+        if (typeof this.subscribe === 'function') {
+            this.subscribe();
+        }
+    }
 
     public render() {
         const { detailFeedQuery } = this.props;
@@ -109,4 +100,29 @@ export default graphql(GET_DETAIL_FEED, {
     options: (props: any) => ({
         variables: { fbId: `${props.group.fbId}_${props.match.params.fbId}` },
     }),
-})(withApollo(Container));
+    props: ({ detailFeedQuery, ownProps: props }: any) => {
+        return {
+            ...props,
+            detailFeedQuery,
+            subscribeComment: () => {
+                return detailFeedQuery.subscribeToMore({
+                    document: SUBSCRIPTION_COMMENT,
+                    updateQuery: (prev: any, { subscriptionData: { data: { commentAdded } } }: any) => {
+                        const { detailFeed } = prev;
+
+                        return {
+                            detailFeed: {
+                                ...detailFeed,
+                                commentCount: detailFeed.commentCount + 1,
+                                comments: detailFeed.comments.concat([commentAdded])
+                            }
+                        }
+                    },
+                    variables: {
+                        postId: `${props.group.fbId}_${props.match.params.fbId}`
+                    }
+                })
+            }
+        }
+    }
+})(Container);
